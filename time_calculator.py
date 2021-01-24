@@ -12,15 +12,15 @@ def extract_times(start, duration):
     """
     # extracting hrs and mins from start time
     pattern = '([0-9]+):([0-9]+) ([APM]+)'
-    hrs_mins_AMPM = [x for x in re.findall(pattern, start)[0]]
-    hrs_mins_AMPM[0], hrs_mins_AMPM[1] = int(hrs_mins_AMPM[0]), int(hrs_mins_AMPM[1])
-    if hrs_mins_AMPM[2] == 'PM': hrs_mins_AMPM[0] += 12  # convert to 24-hours format
-    start_d = {'hrs': hrs_mins_AMPM[0], 'mins': hrs_mins_AMPM[1]}
+    hrs_mins_ampm = [x for x in re.findall(pattern, start)[0]]
+    hrs_mins_ampm[0], hrs_mins_ampm[1] = int(hrs_mins_ampm[0]), int(hrs_mins_ampm[1])
+    if hrs_mins_ampm[2] == 'PM': hrs_mins_ampm[0] += 12  # convert to 24-hours format
+    start_d = {'hrs': hrs_mins_ampm[0], 'mins': hrs_mins_ampm[1]}
 
     # extracting hrs and mins from duration time
     dur_list = duration.split(':')
     dur_d = {'hrs': int(dur_list[0]), 'mins': int(dur_list[1])}
-    dur_d['hrs'] = dur_d['hrs'] + (start_d['mins'] + dur_d['mins']) // 60 # see docstring for explan.
+    dur_d['hrs'] = dur_d['hrs'] + (start_d['mins'] + dur_d['mins']) // 60  # see docstring for explan.
 
     return start_d, dur_d
 
@@ -49,12 +49,11 @@ def processing_data(start_d, dur_d, starting_day=''):
     no_of_days = (start_d['hrs'] + dur_d['hrs']) // 24
     # calculating final day
     if starting_day:
-        weekday = {1: 'Monday', 2: "Tuesday", 3: "Wednesday", 4: "Thursday",
-                   5: "Friday", 6: "Saturday", 7: "Sunday"}
-        for k, v in weekday.items():
-            if starting_day.title() == v:
-                weekday_index = (k + no_of_days) % 7
-                if weekday_index == 0: weekday_index = 7;
+        weekday = ('fakeday', 'Monday', "Tuesday", "Wednesday", "Thursday",
+                   "Friday", "Saturday", "Sunday")
+        k = weekday.index(starting_day.title())
+        weekday_index = (k + no_of_days) % 7
+        if weekday_index == 0: weekday_index = 7;
         final_day = weekday[weekday_index]
     else:
         final_day = ''
